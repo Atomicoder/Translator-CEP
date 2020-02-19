@@ -24,9 +24,11 @@ function init() {
 
     alButton.addEventListener('click',  () => {
         const imputAlert = document.getElementById("imp_num").value;
+        let uno =1;
 
         
         csInterface.evalScript(`sayBye(alert ${imputAlert})`);
+
     });
 }
 
