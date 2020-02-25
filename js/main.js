@@ -10,22 +10,21 @@ function init() {
     const myButton = document.querySelector("#btn_test");
     const myOtherButton = document.querySelector("#btn_two");
     const alButton = document.querySelector("#btn_imp");
-    
 
-    
+
+
 
     myButton.addEventListener('click', function () {
-        csInterface.evalScript('sayHello()');
+        csInterface.evalScript('fillContent()');
     });
 
     myOtherButton.addEventListener('click', function () {
         csInterface.evalScript('sayBye()');
     });
 
-    alButton.addEventListener('click',  () => {
-        const imputAlert = document.getElementById("imp_num").value;
-        let uno =1;
-        csInterface.evalScript(`sayBye(alert ${imputAlert})`);
+    alButton.addEventListener('click', () => {
+        const inputAlert = document.getElementById("imp_num").value;
+        csInterface.evalScript(`sayBye(alert(${inputAlert}))`);
 
     });
 }

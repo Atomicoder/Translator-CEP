@@ -1,8 +1,11 @@
 /*jslint vars: true, plusplus: true, devel: true, nomen: true, regexp: true, indent: 4, maxerr: 50 */
 /*global $, Folder*/
+    var seq = app.project.activeSequence;
+    var vTracks = seq.videoTracks;
+    var oneTrack = vTracks[0];
+    var trkClips = oneTrack.clips;
 
-
-function sayHello() {
+function fillContent() {
     var csvFile = File.openDialog("Target CSV File", "*.csv"); // PROMPT FOR CSV FILE
     var csvFile = csvFile.fsName; // FORMAT CSV FILEPATH TO BE FRIENDLY
 
@@ -32,13 +35,6 @@ function sayHello() {
         infoArray.splice(infoArray.length - 1, 1)
     }
 
-
-
-    var seq = app.project.activeSequence;
-    var vTracks = seq.videoTracks;
-    var oneTrack = vTracks[0];
-    var trkClips = oneTrack.clips;
-
     for (var j = 1; j < trkClips.numItems + 1; j++) {
 
         var mog = trkClips[j - 1];
@@ -60,8 +56,48 @@ function sayHello() {
     };
 };
 
-function sayBye(msg) {
 
-    alert(msg)
+function getContent() {
+
+    var content = []
+
+
+    for (var j = 1; j < trkClips.numItems + 1; j++) {
+
+        var mog = trkClips[j - 1];
+        var title = mog.components[2].properties;
+
+        // var jumpLine = (param[5] == "true" ? true : false);
+        // var square = (param[6] == "true" ? true : false);
+
+
+
+        var textMog = title[0].getValue();
+        var parseText = JSON.parse(textMog)
+
+        content.push(parseText.textEditValue)
+
+        // title[1].getValue(Number(param[1]));
+        // title[2].getValue(Number(param[2]));
+        // title[4].getValue(Number(param[3]));
+        // title[5].getValue(Number(param[4]));
+        // title[6].getValue(jumpLine);
+        // title[7].getValue(square);
+    };
+    var allValues = content.join(",")
+
+    // $.writeln(allValues)
+
+    var saveCvs = File.saveDialog("Save CVS", "*.csv")
+    saveCvs = saveCvs.fsName
+
+    var fileWrite = File(saveCvs) //OPEN, WRITE, AND CLOSE THE CSV FILE
+        fileWrite.open("w");
+        fileWrite.write(allValues)
+        fileWrite.close();
+
 
 };
+
+
+getContent()
