@@ -74,8 +74,10 @@ function getContent() {
 
         var textMog = title[0].getValue();
         var parseText = JSON.parse(textMog)
+        
 
         content.push(parseText.textEditValue)
+        content.push("/n")
 
         // title[1].getValue(Number(param[1]));
         // title[2].getValue(Number(param[2]));
