@@ -1,9 +1,9 @@
 /*jslint vars: true, plusplus: true, devel: true, nomen: true, regexp: true, indent: 4, maxerr: 50 */
 /*global $, Folder*/
-    var seq = app.project.activeSequence;
-    var vTracks = seq.videoTracks;
-    var oneTrack = vTracks[0];
-    var trkClips = oneTrack.clips;
+var seq = app.project.activeSequence;
+var vTracks = seq.videoTracks;
+var oneTrack = vTracks[0];
+var trkClips = oneTrack.clips;
 
 function fillContent() {
     var csvFile = File.openDialog("Target CSV File", "*.csv"); // PROMPT FOR CSV FILE
@@ -60,6 +60,7 @@ function fillContent() {
 function getContent() {
 
     var content = []
+    var strCVS = " "
 
 
     for (var j = 1; j < trkClips.numItems + 1; j++) {
@@ -72,12 +73,12 @@ function getContent() {
 
 
 
-        var textMog = title[0].getValue();
-        var parseText = JSON.parse(textMog)
-        
+        var textMog = title[0].getValue(); 
+        var textObj = JSON.parse(textMog)
+        // $.writeln(textObj.textEditValue)  
 
-        content.push(parseText.textEditValue)
-        content.push("/n")
+        strCVS += "," + textObj.textEditValue  + "\n"
+    
 
         // title[1].getValue(Number(param[1]));
         // title[2].getValue(Number(param[2]));
@@ -86,20 +87,22 @@ function getContent() {
         // title[6].getValue(jumpLine);
         // title[7].getValue(square);
     };
-    var allValues = content.join(",")
 
-    // $.writeln(allValues)
+
+
+
+     
+
+    $.writeln(strCVS)
 
     var saveCvs = File.saveDialog("Save CVS", "*.csv")
     saveCvs = saveCvs.fsName
 
+
     var fileWrite = File(saveCvs) //OPEN, WRITE, AND CLOSE THE CSV FILE
-        fileWrite.open("w");
-        fileWrite.write(allValues)
-        fileWrite.close();
+    fileWrite.open("w");
+    fileWrite.write(strCVS)
+    fileWrite.close();
 
 
 };
-
-
-getContent()
