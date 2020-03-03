@@ -77,7 +77,7 @@ function getContent() {
         var textObj = JSON.parse(textMog)
         // $.writeln(textObj.textEditValue)  
 
-        strCVS += "," + textObj.textEditValue  + "\n"
+        strCVS += textObj.textEditValue  + "\n"
     
 
         // title[1].getValue(Number(param[1]));
@@ -106,3 +106,35 @@ function getContent() {
 
 
 };
+
+function readName(){
+
+
+    var objTime = trkClips[0].name
+
+    $.writeln(objTime)
+
+
+    // $.writeln(floteToFrames(objTime))
+
+    // for (var j = 1; j < trkClips.numItems + 1; j++) {
+
+    //     var nameClip = trkClips[j - 1];
+    //     $.writeln( nameClip.inPoint)
+}
+// }
+
+
+  
+getContent()
+
+
+function floteToFrames(secs){
+
+
+    var decimals = secs.toString().substr(-2, 2)
+
+    return parseInt(decimals)*25/100
+
+
+}
