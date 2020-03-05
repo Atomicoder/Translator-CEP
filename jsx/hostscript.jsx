@@ -5,6 +5,10 @@ var vTracks = seq.videoTracks;
 var oneTrack = vTracks[0];
 var trkClips = oneTrack.clips;
 
+var strCVS = ""
+
+var subtitles = []
+
 function fillContent() {
     var csvFile = File.openDialog("Target CSV File", "*.csv"); // PROMPT FOR CSV FILE
     var csvFile = csvFile.fsName; // FORMAT CSV FILEPATH TO BE FRIENDLY
@@ -57,10 +61,125 @@ function fillContent() {
 };
 
 
+
+function chooseGraphic() {
+    for (var j = 0; j < trkClips.numItems; j++) {
+        if (trkClips[j].name == "Lower thirds") {
+            getLowerThird()
+        }
+        if (trkClips[j].name == "Lcation") {
+            getLocation()
+        }
+
+
+
+
+    };
+
+    exportFiles()
+}
+
+function getLowerThird() {
+
+    var content = []
+
+
+    for (var j = 1; j < trkClips.numItems + 1; j++) {
+
+        var mog = trkClips[j - 1];
+        var title = mog.components[2].properties
+
+        var textName = title[0].getValue()
+        var textTitle = title[1].getValue()
+        textName = JSON.parse(textName)
+        textTitle = JSON.parse(textTitle)
+
+        var mogObj = {}
+
+        mogObj.type = "Lower Third"
+        mogObj.name = textName.textEditValue
+        mogObj.title = textTitle.textEditValue
+        mogObj.timeIm = mog.start.seconds
+        mogObj.timeOut = mog.end.seconds
+
+        // var expObj = JSON.stringify(mogObj)
+
+        subtitles.push(mogObj)
+
+        strCVS += "Lower Third" + "," + "Name" + "," + textName.textEditValue + "\n" + "," + "Title" + "," + textTitle.textEditValue + "\n"
+
+    };
+
+
+    $.writeln(textName.textEditValue)
+    // $.writeln(mog.start.seconds)
+    // $.writeln(strCVS)
+    // $.writeln(mogObj.timeIm)
+
+    // var saveCvs = File.saveDialog("Save CVS", "*.csv")
+    // if (saveCvs) {
+
+    //     saveCvs = saveCvs.fsName
+
+    //     var fileWrite = File(saveCvs) //OPEN, WRITE, AND CLOSE THE CSV FILE
+    //     fileWrite.open("w");
+    //     fileWrite.write(strCVS)
+    //     fileWrite.close();
+    // }
+
+
+    // var saveJson = File.saveDialog("Save Json", "*.json")
+    // saveJson.encoding = "UTF-8";
+    // if (saveJson) {
+
+    //     saveJson = saveJson.fsName
+
+    //     var fileWrite = File(saveJson) //OPEN, WRITE, AND CLOSE THE CSV FILE
+    //     fileWrite.open("w");
+    //     fileWrite.write(expObj)
+
+    //     fileWrite.close();
+
+    // }
+
+};
+
+function getLocation() {
+
+    var content = []
+
+
+    for (var j = 1; j < trkClips.numItems + 1; j++) {
+
+        var mog = trkClips[j - 1];
+        var title = mog.components[2].properties
+
+        var textCity = title[0].getValue()
+        var textCountry = title[1].getValue()
+        textCity = JSON.parse(textCity)
+        textCountry = JSON.parse(textCountry)
+
+        var mogObj = {}
+
+        mogObj.type = "Location"
+        mogObj.city = textCity.textEditValue
+        mogObj.country = textCountry.textEditValue
+        mogObj.timeIm = mog.start.seconds
+        mogObj.timeOut = mog.end.seconds
+
+        // var expObj = JSON.stringify(mogObj)
+
+        subtitles.push(mogObj)
+
+        strCVS += "Location" + "," + "City" + "," + textCity.textEditValue + "\n" + "," + "Country" + "," + textCountry.textEditValue + "\n"
+
+    };
+
+};
+
 function getContent() {
 
     var content = []
-    var strCVS = " "
 
 
     for (var j = 1; j < trkClips.numItems + 1; j++) {
@@ -68,51 +187,42 @@ function getContent() {
         var mog = trkClips[j - 1];
         var title = mog.components[2].properties;
 
-        // var jumpLine = (param[5] == "true" ? true : false);
-        // var square = (param[6] == "true" ? true : false);
-
-
-
-        var textMog = title[0].getValue(); 
+        var textMog = title[0].getValue();
         var textObj = JSON.parse(textMog)
-        // $.writeln(textObj.textEditValue)  
 
-        strCVS += textObj.textEditValue  + "\n"
-    
 
-        // title[1].getValue(Number(param[1]));
-        // title[2].getValue(Number(param[2]));
-        // title[4].getValue(Number(param[3]));
-        // title[5].getValue(Number(param[4]));
-        // title[6].getValue(jumpLine);
-        // title[7].getValue(square);
+        strCVS += textObj.textEditValue + "\n"
+
+
+
     };
 
-
-
-
-     
 
     $.writeln(strCVS)
 
     var saveCvs = File.saveDialog("Save CVS", "*.csv")
-    saveCvs = saveCvs.fsName
+    if (saveCvs) {
 
+        saveCvs = saveCvs.fsName
 
-    var fileWrite = File(saveCvs) //OPEN, WRITE, AND CLOSE THE CSV FILE
-    fileWrite.open("w");
-    fileWrite.write(strCVS)
-    fileWrite.close();
+        var fileWrite = File(saveCvs) //OPEN, WRITE, AND CLOSE THE CSV FILE
+        fileWrite.open("w");
+        fileWrite.write(strCVS)
+        fileWrite.close();
+    }
 
 
 };
 
-function readName(){
+function readName() {
+
+    for (var j = 0; j < trkClips.numItems; j++) {
+        var objTime = trkClips[j].name
+
+        $.writeln(objTime)
+    }
 
 
-    var objTime = trkClips[0].name
-
-    $.writeln(objTime)
 
 
     // $.writeln(floteToFrames(objTime))
@@ -122,19 +232,33 @@ function readName(){
     //     var nameClip = trkClips[j - 1];
     //     $.writeln( nameClip.inPoint)
 }
-// }
+
+function exportFiles() {
+
+    var saveCvs = File.saveDialog("Save CVS", "*.csv")
+    if (saveCvs) {
+
+        saveCvs = saveCvs.fsName
+
+        var fileWrite = File(saveCvs) //OPEN, WRITE, AND CLOSE THE CSV FILE
+        fileWrite.open("w");
+        fileWrite.write(strCVS)
+        fileWrite.close();
+    }
+
+}
 
 
-  
-getContent()
+
+chooseGraphic()
 
 
-function floteToFrames(secs){
+function floteToFrames(secs) {
 
 
     var decimals = secs.toString().substr(-2, 2)
 
-    return parseInt(decimals)*25/100
+    return parseInt(decimals) * 25 / 100
 
 
 }
