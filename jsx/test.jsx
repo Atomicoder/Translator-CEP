@@ -2,10 +2,11 @@
 /*global $, Folder*/
 var seq = app.project.activeSequence;
 var vTracks = seq.videoTracks;
-var oneTrack = vTracks[0];
+var oneTrack = vTracks[1];
 var trkClips = oneTrack.clips;
 
 var strCVS = ""
+var strVTT = "WEBVTT" + "\n" + "\n"
 
 var subtitles = []
 
@@ -68,15 +69,14 @@ function chooseGraphic() {
             getLowerThird(j)
         } else if (trkClips[j].name === "Location") {
             getLocation(j)
+        } else if (trkClips[j].name === "Big Subs 16x9") {
+            getBigSubs(j)
         }
-
-
-
-
     };
 
     exportFiles()
-    exportJson()
+    // exportJson()
+    // exportVtt()
 }
 
 function getLowerThird(clipNum) {
@@ -84,12 +84,12 @@ function getLowerThird(clipNum) {
 
     var mog = trkClips[clipNum];
     var title = mog.components[2].properties
-//Extract all the info
+    //Extract all the info
     var textName = title[0].getValue()
     var textTitle = title[1].getValue()
     textName = JSON.parse(textName)
     textTitle = JSON.parse(textTitle)
-//populate the JSON file
+    //populate the JSON file
     var mogObj = {}
 
     mogObj.type = "Lower Third"
@@ -106,8 +106,9 @@ function getLowerThird(clipNum) {
 
     //Populate VTT file
 
+    strVTT += clipNum + "Lower Third" + "\n" + secondsToHms(mogObj.timeIm) + " --> " + secondsToHms(mogObj.timeOut) + "\n" + textName.textEditValue + "\n" + textTitle.textEditValue + "\n" + "\n"
 
-    $.writeln(textName.textEditValue)
+
 
 };
 
@@ -124,7 +125,7 @@ function getLocation(clipNum) {
 
     var mogObj = {}
 
-    mogObj.type = "Lower Third"
+    mogObj.type = "Location"
     mogObj.name = textName.textEditValue
     mogObj.title = textTitle.textEditValue
     mogObj.timeIm = mog.start.seconds
@@ -136,10 +137,52 @@ function getLocation(clipNum) {
 
     strCVS += "Locaion" + "," + "Cyty" + "," + textName.textEditValue + "\n" + "," + "Country" + "," + textTitle.textEditValue + "\n"
 
+    //Populate VTT file
+
+    strVTT += clipNum + " Location" + "\n" +
+        secondsToHms(mogObj.timeIm) + " --> " + secondsToHms(mogObj.timeOut) + "\n" +
+        textName.textEditValue +
+        "\n" + textTitle.textEditValue +
+        "\n" + "\n"
 
 
+};
 
-    $.writeln(textName.textEditValue)
+function getBigSubs(clipNum) {
+
+
+    var mog = trkClips[clipNum];
+    var title = mog.components[2].properties
+
+    var textName = title[0].getValue()
+    var lineBrake = title[1].getValue()
+    var startHi = title[2].getValue()
+    var numHi = title[3].getValue()
+    textName = JSON.parse(textName)
+    textTitle = JSON.parse(textTitle)
+
+    var mogObj = {}
+
+    mogObj.type = "Big Subtitle"
+    mogObj.name = textName.textEditValue
+    mogObj.title = textTitle.textEditValue
+    mogObj.timeIm = mog.start.seconds
+    mogObj.timeOut = mog.end.seconds
+
+    // var expObj = JSON.stringify(mogObj)
+
+    subtitles.push(mogObj)
+
+    strCVS += "Locaion" + "," + "Cyty" + "," + textName.textEditValue + "\n" + "," + "Country" + "," + textTitle.textEditValue + "\n"
+
+    //Populate VTT file
+
+    strVTT += clipNum + " Location" + "\n" +
+        secondsToHms(mogObj.timeIm) + " --> " + secondsToHms(mogObj.timeOut) + "\n" +
+        textName.textEditValue +
+        "\n" + textTitle.textEditValue +
+        "\n" + "\n"
+
 
 };
 
@@ -221,7 +264,7 @@ function exportJson() {
 
     var saveJson = File.saveDialog("Save Json", "*.json")
     if (saveJson) {
-        
+
         saveJson = saveJson.fsName
 
         var fileWrite = File(saveJson) //OPEN, WRITE, AND CLOSE THE CSV FILE
@@ -232,8 +275,22 @@ function exportJson() {
 
 }
 
+function exportVtt() {
 
 
+
+    var saveVtt = File.saveDialog("Save VTT", "*.vtt")
+    if (saveVtt) {
+
+        saveVtt = saveVtt.fsName
+
+        var fileWrite = File(saveVtt) //OPEN, WRITE, AND CLOSE THE CSV FILE
+        fileWrite.open("w");
+        fileWrite.write(strVTT)
+        fileWrite.close();
+    }
+
+}
 
 chooseGraphic()
 
@@ -245,4 +302,21 @@ function floteToFrames(secs) {
     return parseInt(decimals) * 25 / 100
 
 
+}
+
+
+function secondsToHms(ti) {
+
+    var secs = Math.floor(ti)
+
+    var t = Math.round((ti - secs) * 100)
+    if (t < 10) {
+        t = "0" + t
+    }
+
+    var h = Math.floor(secs / 3600);
+    var m = Math.floor(secs % 3600 / 60);
+    var s = Math.floor(secs % 3600 % 60);
+
+    return ('0' + h).slice(-2) + ":" + ('0' + m).slice(-2) + ":" + ('0' + s).slice(-2) + "." + t + "0";
 }
