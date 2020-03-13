@@ -72,10 +72,14 @@ function chooseGraphic() {
             getLocation(j)
         } else if (trkClips[j].name === "Big Subs 16x6") {
             getBigSubs(j)
-        } else if (trkClips[j].name === "Intro with Episode") {
+        } else if (trkClips[j].name === "Intro With Episode") {
             introEpisode(j)
         } else if (trkClips[j].name === "Intro only Series") {
             introSeries(j)
+        } else if (trkClips[j].name === "Thumbnail") {
+            thumbnail(j)
+        } else if (trkClips[j].name === "Big Title") {
+            bigTitle(j)
         }
     };
 
@@ -155,40 +159,177 @@ function getLocation(clipNum) {
 
 };
 
+function bigTitle(clipNum) {
+
+
+    var mog = trkClips[clipNum];
+    var title = mog.components[2].properties
+
+    var text = title[0].getValue()
+
+
+
+    text = JSON.parse(text)
+
+
+    var mogObj = {}
+
+    mogObj.type = "Big Title"
+    mogObj.name = text.textEditValue
+
+
+    // var expObj = JSON.stringify(mogObj)
+
+    subtitles.push(mogObj)
+
+    strCVS += "Big Title" + ",Text," + text.textEditValue + "\n" + "\n"
+
+    //Populate VTT file
+
+    // strVTT += clipNum + " Location" + "\n" +
+    //     secondsToHms(mogObj.timeIm) + " --> " + secondsToHms(mogObj.timeOut) + "\n" +
+    //     textName.textEditValue +
+    //     "\n" + textTitle.textEditValue +
+    //     "\n" + "\n"
+
+
+};
+
 function introEpisode(clipNum) {
 
 
     var mog = trkClips[clipNum];
     var title = mog.components[2].properties
 
-    var textName = title[0].getValue()
-    var textTitle = title[1].getValue()
+    var seriesOne = title[0].getValue()
+    var seriesTwo = title[1].getValue()
+    var seriesThree = title[2].getValue()
+    var episodeOne = title[3].getValue()
+    var episodeTwo = title[4].getValue()
+    var episodeThree = title[5].getValue()
 
 
-    textName = JSON.parse(textName)
-    textTitle = JSON.parse(textTitle)
+    seriesOne = JSON.parse(seriesOne)
+    seriesTwo = JSON.parse(seriesTwo)
+    seriesThree = JSON.parse(seriesThree)
+    episodeOne = JSON.parse(episodeOne)
+    episodeTwo = JSON.parse(episodeTwo)
+    episodeThree = JSON.parse(episodeThree)
 
-    var mogObj = {}
+    // var mogObj = {}
 
-    mogObj.type = "Location"
-    mogObj.name = textName.textEditValue
-    mogObj.title = textTitle.textEditValue
-    mogObj.timeIm = mog.start.seconds
-    mogObj.timeOut = mog.end.seconds
+    // mogObj.type = "Location"
+    // mogObj.name = textName.textEditValue
+    // mogObj.title = textTitle.textEditValue
+    // mogObj.timeIm = mog.start.seconds
+    // mogObj.timeOut = mog.end.seconds
 
     // var expObj = JSON.stringify(mogObj)
 
-    subtitles.push(mogObj)
+    // subtitles.push(mogObj)
 
-    strCVS += "Locaion" + "," + "Cyty" + "," + textName.textEditValue + "\n" + "," + "Country" + "," + textTitle.textEditValue + "\n" + "\n"
+    strCVS += "Intro,S1," + seriesOne.textEditValue + "\n" +
+        ",S2," + seriesTwo.textEditValue + "\n" +
+        ",S3," + seriesThree.textEditValue + "\n" +
+        ",E1," + episodeOne.textEditValue + "\n" +
+        ",E2," + episodeTwo.textEditValue + "\n" +
+        ",E3," + episodeThree.textEditValue + "\n" + "\n"
 
     //Populate VTT file
 
-    strVTT += clipNum + " Location" + "\n" +
-        secondsToHms(mogObj.timeIm) + " --> " + secondsToHms(mogObj.timeOut) + "\n" +
-        textName.textEditValue +
-        "\n" + textTitle.textEditValue +
-        "\n" + "\n"
+    // strVTT += clipNum + " Location" + "\n" +
+    //     secondsToHms(mogObj.timeIm) + " --> " + secondsToHms(mogObj.timeOut) + "\n" +
+    //     textName.textEditValue +
+    //     "\n" + textTitle.textEditValue +
+    //     "\n" + "\n"
+
+
+};
+
+function introSeries(clipNum) {
+
+
+    var mog = trkClips[clipNum];
+    var title = mog.components[2].properties
+
+    var seriesOne = title[0].getValue()
+    var seriesTwo = title[1].getValue()
+    var seriesThree = title[2].getValue()
+
+
+
+    seriesOne = JSON.parse(seriesOne)
+    seriesTwo = JSON.parse(seriesTwo)
+    seriesThree = JSON.parse(seriesThree)
+
+
+    // var mogObj = {}
+
+    // mogObj.type = "Location"
+    // mogObj.name = textName.textEditValue
+    // mogObj.title = textTitle.textEditValue
+    // mogObj.timeIm = mog.start.seconds
+    // mogObj.timeOut = mog.end.seconds
+
+    // var expObj = JSON.stringify(mogObj)
+
+    // subtitles.push(mogObj)
+
+    strCVS += "Intro,S1," + seriesOne.textEditValue + "\n" +
+        ",S2," + seriesTwo.textEditValue + "\n" +
+        ",S3," + seriesThree.textEditValue + "\n" + "\n"
+
+    //Populate VTT file
+
+    // strVTT += clipNum + " Location" + "\n" +
+    //     secondsToHms(mogObj.timeIm) + " --> " + secondsToHms(mogObj.timeOut) + "\n" +
+    //     textName.textEditValue +
+    //     "\n" + textTitle.textEditValue +
+    //     "\n" + "\n"
+
+
+};
+
+function thumbnail(clipNum) {
+
+
+    var mog = trkClips[clipNum];
+    var title = mog.components[2].properties
+
+    var series = title[0].getValue()
+    var episodeOne = title[1].getValue()
+    var episodeTwo = title[2].getValue()
+
+
+
+    seriesOne = JSON.parse(series)
+    episodeOne = JSON.parse(episodeOne)
+    episodeThree = JSON.parse(episodeTwo)
+
+
+    // var mogObj = {}
+
+    // mogObj.type = "Location"
+    // mogObj.name = textName.textEditValue
+    // mogObj.title = textTitle.textEditValue
+    // mogObj.timeIm = mog.start.seconds
+    // mogObj.timeOut = mog.end.seconds
+
+    // var expObj = JSON.stringify(mogObj)
+
+    // subtitles.push(mogObj)
+
+    strCVS += "Thumbnail,Series," + series.textEditValue + "\n" +
+        ",Episode 1," + episodeOne.textEditValue + "\n" +
+        ",Episode 2," + episodeThree.textEditValue + "\n" + "\n"
+
+    //Populate VTT file
+
+    // strVTT += clipNum + " Location" + "\n" +
+    //     secondsToHms(mogObj.timeIm) + " --> " + secondsToHms(mogObj.timeOut) + "\n" +
+    //     textName.textEditValue +
+    //     "\n" + textTitle.textEditValue +
+    //     "\n" + "\n"
 
 
 };
