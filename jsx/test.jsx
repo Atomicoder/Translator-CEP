@@ -1,5 +1,6 @@
 /*jslint vars: true, plusplus: true, devel: true, nomen: true, regexp: true, indent: 4, maxerr: 50 */
 /*global $, Folder*/
+
 var seq = app.project.activeSequence;
 var vTracks = seq.videoTracks;
 var oneTrack = vTracks[1];
@@ -69,8 +70,12 @@ function chooseGraphic() {
             getLowerThird(j)
         } else if (trkClips[j].name === "Location") {
             getLocation(j)
-        } else if (trkClips[j].name === "Big Subs 16x9") {
+        } else if (trkClips[j].name === "Big Subs 16x6") {
             getBigSubs(j)
+        } else if (trkClips[j].name === "Intro with Episode") {
+            introEpisode(j)
+        } else if (trkClips[j].name === "Intro only Series") {
+            introSeries(j)
         }
     };
 
@@ -102,7 +107,7 @@ function getLowerThird(clipNum) {
 
     //populate the CVS file
 
-    strCVS += "Lower Third" + "," + "Name" + "," + textName.textEditValue + "\n" + "," + "Title" + "," + textTitle.textEditValue + "\n"
+    strCVS += "Lower Third" + "," + "Name" + "," + textName.textEditValue + "\n" + "," + "Title" + "," + textTitle.textEditValue + "\n" + "\n"
 
     //Populate VTT file
 
@@ -120,6 +125,8 @@ function getLocation(clipNum) {
 
     var textName = title[0].getValue()
     var textTitle = title[1].getValue()
+
+
     textName = JSON.parse(textName)
     textTitle = JSON.parse(textTitle)
 
@@ -135,7 +142,45 @@ function getLocation(clipNum) {
 
     subtitles.push(mogObj)
 
-    strCVS += "Locaion" + "," + "Cyty" + "," + textName.textEditValue + "\n" + "," + "Country" + "," + textTitle.textEditValue + "\n"
+    strCVS += "Locaion" + "," + "Cyty" + "," + textName.textEditValue + "\n" + "," + "Country" + "," + textTitle.textEditValue + "\n" + "\n"
+
+    //Populate VTT file
+
+    strVTT += clipNum + " Location" + "\n" +
+        secondsToHms(mogObj.timeIm) + " --> " + secondsToHms(mogObj.timeOut) + "\n" +
+        textName.textEditValue +
+        "\n" + textTitle.textEditValue +
+        "\n" + "\n"
+
+
+};
+
+function introEpisode(clipNum) {
+
+
+    var mog = trkClips[clipNum];
+    var title = mog.components[2].properties
+
+    var textName = title[0].getValue()
+    var textTitle = title[1].getValue()
+
+
+    textName = JSON.parse(textName)
+    textTitle = JSON.parse(textTitle)
+
+    var mogObj = {}
+
+    mogObj.type = "Location"
+    mogObj.name = textName.textEditValue
+    mogObj.title = textTitle.textEditValue
+    mogObj.timeIm = mog.start.seconds
+    mogObj.timeOut = mog.end.seconds
+
+    // var expObj = JSON.stringify(mogObj)
+
+    subtitles.push(mogObj)
+
+    strCVS += "Locaion" + "," + "Cyty" + "," + textName.textEditValue + "\n" + "," + "Country" + "," + textTitle.textEditValue + "\n" + "\n"
 
     //Populate VTT file
 
@@ -155,17 +200,19 @@ function getBigSubs(clipNum) {
     var title = mog.components[2].properties
 
     var textName = title[0].getValue()
-    var lineBrake = title[1].getValue()
-    var startHi = title[2].getValue()
-    var numHi = title[3].getValue()
+    var lineBrake = title[2].getValue()
+    var startHi = title[3].getValue()
+    var numHi = title[4].getValue()
     textName = JSON.parse(textName)
-    textTitle = JSON.parse(textTitle)
+
 
     var mogObj = {}
 
     mogObj.type = "Big Subtitle"
     mogObj.name = textName.textEditValue
-    mogObj.title = textTitle.textEditValue
+    mogObj.lineBrake = lineBrake
+    mogObj.startHi = startHi
+    mogObj.numHi = numHi
     mogObj.timeIm = mog.start.seconds
     mogObj.timeOut = mog.end.seconds
 
@@ -173,15 +220,15 @@ function getBigSubs(clipNum) {
 
     subtitles.push(mogObj)
 
-    strCVS += "Locaion" + "," + "Cyty" + "," + textName.textEditValue + "\n" + "," + "Country" + "," + textTitle.textEditValue + "\n"
+    strCVS += "Big Subtitle" + "," + "Text" + "," + textName.textEditValue + ",," + "Linebrake ," + lineBrake + ", Highlight word ," + startHi + ", Highlight number of words ," + numHi + "\n" + "\n"
 
     //Populate VTT file
 
-    strVTT += clipNum + " Location" + "\n" +
-        secondsToHms(mogObj.timeIm) + " --> " + secondsToHms(mogObj.timeOut) + "\n" +
-        textName.textEditValue +
-        "\n" + textTitle.textEditValue +
-        "\n" + "\n"
+    // strVTT += clipNum + " Location" + "\n" +
+    //     secondsToHms(mogObj.timeIm) + " --> " + secondsToHms(mogObj.timeOut) + "\n" +
+    //     textName.textEditValue +
+    //     "\n" + textTitle.textEditValue +
+    //     "\n" + "\n"
 
 
 };

@@ -91,6 +91,7 @@ function getLowerThird() {
 
         var textName = title[0].getValue()
         var textTitle = title[1].getValue()
+        $.writeln(textTitle)
         textName = JSON.parse(textName)
         textTitle = JSON.parse(textTitle)
 
@@ -156,7 +157,9 @@ function getLocation() {
 
         var textCity = title[0].getValue()
         var textCountry = title[1].getValue()
+        $.writeln(textCity)
         textCity = JSON.parse(textCity)
+        $.writeln(textEditValue)
         textCountry = JSON.parse(textCountry)
 
         var mogObj = {}
