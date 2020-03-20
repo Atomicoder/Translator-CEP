@@ -11,6 +11,9 @@ var strVTT = "WEBVTT" + "\n" + "\n"
 
 var subtitles = []
 
+var id = 0
+var row = 1
+
 function fillContent() {
     var csvFile = File.openDialog("Target CSV File", "*.csv"); // PROMPT FOR CSV FILE
     var csvFile = csvFile.fsName; // FORMAT CSV FILEPATH TO BE FRIENDLY
@@ -18,7 +21,7 @@ function fillContent() {
     var infoArray;
 
     // Following opens the text file and stores it in var CSVFILE. Then splits it by every new line, and COMA into a multi-tiered array, INFOARRAY.
-    if (csvFile) {
+    if (csvFile) {.
 
         var file = File(csvFile) //OPEN, READ, AND CLOSE THE CSV FILE
         file.open("r");
@@ -80,6 +83,10 @@ function chooseGraphic() {
             thumbnail(j)
         } else if (trkClips[j].name === "Big Title") {
             bigTitle(j)
+        } else if (trkClips[j].name === "Text on screen") {
+            textScreen(j)
+        } else if (trkClips[j].name === "Countdown") {
+            countDown(j)
         }
     };
 
@@ -117,6 +124,8 @@ function getLowerThird(clipNum) {
 
     strVTT += clipNum + "Lower Third" + "\n" + secondsToHms(mogObj.timeIm) + " --> " + secondsToHms(mogObj.timeOut) + "\n" + textName.textEditValue + "\n" + textTitle.textEditValue + "\n" + "\n"
 
+    id += id + 1
+    row += row + 3
 
 
 };
@@ -146,7 +155,7 @@ function getLocation(clipNum) {
 
     subtitles.push(mogObj)
 
-    strCVS += "Locaion" + "," + "Cyty" + "," + textName.textEditValue + "\n" + "," + "Country" + "," + textTitle.textEditValue + "\n" + "\n"
+    strCVS += "Locaion" + "," + "City" + "," + textName.textEditValue + "\n" + "," + "Country" + "," + textTitle.textEditValue + "\n" + "\n"
 
     //Populate VTT file
 
@@ -194,6 +203,7 @@ function bigTitle(clipNum) {
 
 
 };
+
 
 function introEpisode(clipNum) {
 
@@ -334,6 +344,49 @@ function thumbnail(clipNum) {
 
 };
 
+function countDown(clipNum) {
+
+
+    var mog = trkClips[clipNum];
+    var title = mog.components[2].properties
+
+    var countNumber = title[0].getValue()
+    var countText = title[1].getValue()
+
+
+
+
+    countNumber = JSON.parse(countNumber)
+    countText = JSON.parse(countText)
+
+
+
+    // var mogObj = {}
+
+    // mogObj.type = "Location"
+    // mogObj.name = textName.textEditValue
+    // mogObj.title = textTitle.textEditValue
+    // mogObj.timeIm = mog.start.seconds
+    // mogObj.timeOut = mog.end.seconds
+
+    // var expObj = JSON.stringify(mogObj)
+
+    // subtitles.push(mogObj)
+
+    strCVS += "Countdown,Number," + countNumber.textEditValue + "\n" +
+        ",Text," + countText.textEditValue + "\n" + "\n"
+
+    //Populate VTT file
+
+    // strVTT += clipNum + " Location" + "\n" +
+    //     secondsToHms(mogObj.timeIm) + " --> " + secondsToHms(mogObj.timeOut) + "\n" +
+    //     textName.textEditValue +
+    //     "\n" + textTitle.textEditValue +
+    //     "\n" + "\n"
+
+
+};
+
 function getBigSubs(clipNum) {
 
 
@@ -374,6 +427,45 @@ function getBigSubs(clipNum) {
 
 };
 
+function textScreen(clipNum) {
+
+
+    var mog = trkClips[clipNum];
+    var title = mog.components[2].properties
+
+    var textName = title[0].getValue()
+    var lineBrake = title[5].getValue()
+    var startHi = title[1].getValue()
+    var numHi = title[2].getValue()
+    textName = JSON.parse(textName)
+
+
+    var mogObj = {}
+
+    mogObj.type = "Text on screen"
+    mogObj.name = textName.textEditValue
+    mogObj.lineBrake = lineBrake
+    mogObj.startHi = startHi
+    mogObj.numHi = numHi
+    mogObj.timeIm = mog.start.seconds
+    mogObj.timeOut = mog.end.seconds
+
+    // var expObj = JSON.stringify(mogObj)
+
+    subtitles.push(mogObj)
+
+    strCVS += "Text on screen" + "," + "Text" + "," + textName.textEditValue + ",," + "Linebrake ," + lineBrake + ", Highlight word ," + startHi + ", Highlight number of words ," + numHi + "\n" + "\n"
+
+    //Populate VTT file
+
+    // strVTT += clipNum + " Location" + "\n" +
+    //     secondsToHms(mogObj.timeIm) + " --> " + secondsToHms(mogObj.timeOut) + "\n" +
+    //     textName.textEditValue +
+    //     "\n" + textTitle.textEditValue +
+    //     "\n" + "\n"
+
+
+};
 
 function getContent() {
 
