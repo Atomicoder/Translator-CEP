@@ -7,24 +7,28 @@ var csInterface = new CSInterface();
 
 function init() {
 
-    const myButton = document.querySelector("#btn_test");
-    const myOtherButton = document.querySelector("#btn_two");
-    const alButton = document.querySelector("#btn_imp");
+    const myButton = document.querySelector("#btn_Import");
+    const myOtherButton = document.querySelector("#btn_export");
+    const renderButton = document.querySelector("#btn_render");
+    const alButton = document.querySelector("#btn_ale");
 
 
 
 
     myButton.addEventListener('click', function () {
-        csInterface.evalScript('fillContent()');
+        csInterface.evalScript("openSheetReplace()");
     });
 
     myOtherButton.addEventListener('click', function () {
-        csInterface.evalScript('sayBye()');
+        csInterface.evalScript("chooseGraphic()");
+    });
+    
+    renderButton.addEventListener('click', function () {
+        csInterface.evalScript("renderEncoder()");
     });
 
     alButton.addEventListener('click', () => {
-        const inputAlert = document.getElementById("imp_num").value;
-        csInterface.evalScript(`sayBye(alert(${inputAlert}))`);
+        csInterface.evalScript("sayBye()");
 
     });
 }
