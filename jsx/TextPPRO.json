@@ -1,0 +1,41 @@
+({
+  "fonteditinfo": {
+    "capPropFontEdit": false,
+    "capPropFontFauxStyleEdit": false,
+    "capPropFontSizeEdit": false,
+    "fontEditValue": "ProximaNova-Bold",
+    "fontFSAllCapsValue": true,
+    "fontFSBoldValue": false,
+    "fontFSItalicValue": false,
+    "fontFSSmallCapsValue": false,
+    "fontSizeEditValue": 40
+  },
+  "textEditValue": "que va, a pasar"
+},
+{
+  "capPropFontEdit": false,
+  "capPropFontSizeEdit": false,
+  "capPropTextRunCount": 1,
+  "fontEditValue": ["ProximaNova-Bold"],
+  "fontFSAllCapsValue": [true],
+  "fontFSBoldValue": [false],
+  "fontFSItalicValue": [false],
+  "fontFSSmallCapsValue": [false],
+  "fontSizeEditValue": [55],
+  "fontTextRunLength": [4],
+  "textEditValue": "lima"
+},
+{
+  "capPropFontEdit": false,
+  "capPropFontFauxStyleEdit": false,
+  "capPropFontSizeEdit": false,
+  "capPropTextRunCount": 1,
+  "fontEditValue": ["ProximaNova-Bold"],
+  "fontFSAllCapsValue": [true],
+  "fontFSBoldValue": [false],
+  "fontFSItalicValue": [false],
+  "fontFSSmallCapsValue": [false],
+  "fontSizeEditValue": [55],
+  "fontTextRunLength": [6],
+  "textEditValue": "Pepito"
+})

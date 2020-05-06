@@ -18,7 +18,7 @@ function sayBye() {
     alert("hola")
 }
 
-// chooseGraphic()
+chooseGraphic()
 // openSheetReplace()
 
 // renderEncoder()
@@ -241,23 +241,13 @@ function getLowerThird(clipNum) {
     //Extract all the info
     var textName = title[0].getValue()
     var textTitle = title[1].getValue()
-    // $.writeln(textName)
-    // textName = JSON.parse(textName)
-    // textTitle = JSON.parse(textTitle)
-    //populate the JSON file
-    // var mogObj = {}
+    textName = JSON.parse(textName)
+    textTitle = JSON.parse(textTitle)
 
-    // mogObj.type = "Lower Third"
-    // mogObj.name = textName.textEditValue
-    // mogObj.title = textTitle.textEditValue
-    // mogObj.timeIm = mog.start.seconds
-    // mogObj.timeOut = mog.end.seconds
+    $.writeln(textName.textEditValue)
+    $.writeln(textTitle.textEditValue)
 
-    // subtitles.push(mogObj)
-
-    //populate the CVS file
-
-    strCVS += "Lower thirds" + "," + textName + "," + textTitle + "\n"
+    strCVS += "Lower thirds" + "," + textName.textEditValue + "," + textTitle.textEditValue + "\n"
 
     //Populate VTT file
 
@@ -276,24 +266,14 @@ function getLocation(clipNum) {
 
     var textName = title[0].getValue()
     var textTitle = title[1].getValue()
+    $.writeln(textName)
+    $.writeln(textTitle)
+
+    textName = JSON.parse(textName)
+    textTitle = JSON.parse(textTitle)
 
 
-    // textName = JSON.parse(textName)
-    // textTitle = JSON.parse(textTitle)
-
-    // var mogObj = {}
-
-    // mogObj.type = "Location"
-    // mogObj.name = textName.textEditValue
-    // mogObj.title = textTitle.textEditValue
-    // mogObj.timeIm = mog.start.seconds
-    // mogObj.timeOut = mog.end.seconds
-
-    // var expObj = JSON.stringify(mogObj)
-
-    // subtitles.push(mogObj)
-
-    strCVS += "Location" + "," + textName + "," + textTitle + "\n"
+    strCVS += "Location" + "," + textName.textEditValue + "," + textTitle.textEditValue + "\n"
 
     //Populate VTT file
 
